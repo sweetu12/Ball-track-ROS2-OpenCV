@@ -13,7 +13,7 @@ class BallDetectorNode(Node):
 
         # Declare parameters for HSV color range and image topic
         self.declare_parameter('image_topic', '/image_raw')
-        # These HSV values are common for a tennis ball, but might need tuning.
+        # These are HSV values for a tennis ball, but might need tuning.
         # Hue: 0-179, Saturation: 0-255, Value: 0-255 in OpenCV
         self.declare_parameter('hsv_lower_h', 29) # Lower Hue
         self.declare_parameter('hsv_lower_s', 86) # Lower Saturation
@@ -44,7 +44,7 @@ class BallDetectorNode(Node):
             Image,
             image_topic,
             self.image_callback,
-            10  # QoS profile depth
+            10  #  profile depth
         )
         self.get_logger().info(f"Subscribed to image topic: {image_topic}")
 
@@ -72,7 +72,7 @@ class BallDetectorNode(Node):
             self.get_logger().error(f"CvBridge Error: {e}")
             return
 
-        # Get frame dimensions
+        # frame dimensions
         h, w, _ = cv_frame.shape
         if h == 0 or w == 0:
             self.get_logger().warn("Received an empty frame.")
@@ -84,7 +84,8 @@ class BallDetectorNode(Node):
 
         # Create a mask for the tennis ball color
         mask = cv2.inRange(hsv_frame, self.hsv_lower, self.hsv_upper)
-        # Perform morphological operations to remove small blobs
+        
+        # remove small blobs
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)
 
@@ -142,9 +143,7 @@ def main(args=None):
     except KeyboardInterrupt:
         ball_detector_node.get_logger().info('Keyboard interrupt, shutting down.')
     finally:
-        # Destroy the node explicitly
-        # (optional - otherwise it will be done automatically
-        # when the garbage collector destroys the node object)
+
         ball_detector_node.destroy_node()
         rclpy.shutdown()
 
