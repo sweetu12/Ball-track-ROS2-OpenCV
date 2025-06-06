@@ -1,0 +1,46 @@
+
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='tennis_ball_tracker',
+            executable='ball_detector_node', # Name of the entry point in setup.py
+            name='ball_detector', # Name of the node when it runs
+            output='screen', # Show output in the console
+            emulate_tty=True, # Ensure colorized output if any
+            parameters=[
+                {'image_topic': '/camera/image_raw'}, # Change this to your camera's image topic
+                # You can also override HSV values here if needed, e.g.:
+                # {'hsv_lower_h': 30},
+                # {'hsv_lower_s': 100},
+                # {'hsv_lower_v': 50},
+                # {'hsv_upper_h': 60},
+                # {'hsv_upper_s': 255},
+                # {'hsv_upper_v': 255},
+                {'min_radius': 10} # Minimum radius of the ball to be considered detected
+            ]
+        )
+        # To test with a video file, you can use ros2_video_streamer package (if available)
+        # or image_publisher from image_common.
+        # Example using image_publisher to loop a video file:
+        # Node(
+        #     package='image_publisher',
+        #     executable='image_publisher_node',
+        #     name='video_publisher',
+        #     output='screen',
+        #     emulate_tty=True,
+        #     parameters=[
+        #         {'publish_rate': 30.0},
+        #         {'filename': '/path/to/your/tennis_ball_video.mp4'}, # Replace with your video path
+        #         {'loop': True},
+        #         {'flip_horizontal': False},
+        #         {'flip_vertical': False},
+        #         {'frame_id': 'camera_link'}
+        #     ],
+        #     remappings=[
+        #         ('/image_raw', '/camera/image_raw') # Ensure it publishes to the topic detector subscribes to
+        #     ]
+        # )
+    ])
