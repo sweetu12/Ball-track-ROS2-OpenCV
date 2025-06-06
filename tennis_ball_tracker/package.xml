@@ -5,7 +5,7 @@
   <version>0.0.1</version>
   <description>ROS 2 package for detecting a tennis ball using OpenCV.</description>
   <maintainer email="2003sitanshu@gmail.com">sitanshu</maintainer>
-  <license>Apache License 2.0</license> <!-- Or your preferred license -->
+  <license>Apache License 2.0</license> 
 
   <buildtool_depend>ament_python</buildtool_depend>
 
